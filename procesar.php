@@ -1,6 +1,8 @@
 <?php
 include 'auth.php';
-require_login();
+include 'pantalla de carga.php';
+session_start();
+
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: formulario.php');

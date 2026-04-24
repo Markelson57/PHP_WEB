@@ -1,6 +1,8 @@
 <?php
-session_start();
 include 'auth.php';
+include 'pantalla de carga.php';
+session_start();
+
 
 if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'moderador' && $_SESSION['role'] !== 'admin') {
     header("Location: login.php");

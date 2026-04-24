@@ -1,6 +1,7 @@
 <?php
 include 'auth.php';
-require_login();
+include 'pantalla de carga.php';
+session_start();
 
 $user_data = get_user_data();
 $user = $user_data['user'];

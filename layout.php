@@ -1,4 +1,6 @@
 <?php
+include 'pantalla de carga.php';
+session_start();
 $page_title = $page_title ?? 'Panel Premium';
 $page_styles = $page_styles ?? '';
 $page_content = $page_content ?? '';

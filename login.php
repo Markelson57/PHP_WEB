@@ -1,42 +1,37 @@
 <?php
 include 'auth.php';
+include 'pantalla de carga.php';
+session_start();
 
-$page_title = 'Login Seguro';
-$page_main_class = 'content-pad content-pad--centered';
+$conn = new mysqli("localhost", "web", "1234", "panel");
+
 $error = '';
 
-$conn = new mysqli('localhost', 'web', '1234', 'panel');
-
-if ($conn->connect_error) {
-    die('DB ERROR: ' . $conn->connect_error);
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
 
-    $stmt = $conn->prepare('SELECT * FROM users WHERE username=?');
-    if (!$stmt) {
-        die('ERROR PREPARE SELECT: ' . $conn->error);
-    }
+    $username = trim($_POST['username']);
+    $password = $_POST['password'];
 
-    $stmt->bind_param('s', $username);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username=?");
+    $stmt->bind_param("s", $username);
     $stmt->execute();
+
     $user = $stmt->get_result()->fetch_assoc();
 
     if ($user && password_verify($password, $user['password'])) {
+
+        session_regenerate_id(true); // 🔐 seguridad sesión
+
+        $_SESSION['user_id'] = $user['id'];
         $_SESSION['user'] = $user['username'];
         $_SESSION['role'] = $user['role'];
-        $_SESSION['user_id'] = $user['id'];
 
-        header('Location: dashboard.php');
+        header("Location: dashboard.php");
         exit;
     }
 
-    $error = 'Login incorrecto';
+    $error = "Login incorrecto";
 }
-
-ob_start();
 ?>
 <style>
     :root {
